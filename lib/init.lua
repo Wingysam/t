@@ -1096,6 +1096,16 @@ do
 	end
 end
 
+function t.byK(k, interfaces)
+	return function(data)
+    local success, err = t.interface({
+      [k] = t.keyOf(interfaces)
+    })(data)
+    if not success then return false, err end
+    return interfaces[data[k]](data)
+  end
+end
+
 --[[**
 	ensure value is an Instance and it's ClassName matches the given ClassName
 
