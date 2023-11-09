@@ -1102,8 +1102,9 @@ function t.byK(k, interfaces)
       [k] = t.keyOf(interfaces)
     })(data)
     if not success then return false, err end
+		local interface = interfaces[data[k]]
 		data[k] = nil
-    return interfaces[data[k]](data)
+    return interface(data)
   end
 end
 
