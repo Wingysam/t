@@ -510,12 +510,19 @@ function t.literal(...)
 		end
 	else
 		local literals = {}
+		local literalsAsStrings = {}
 		for i = 1, size do
 			local value = select(i, ...)
+			literalsAsStrings[i] = tostring(value)
 			literals[i] = t.literal(value)
 		end
 
-		return t.union(table.unpack(literals, 1, size))
+		return function(value)
+			local success = t.union(table.unpack(literals, 1, size))(value)
+			if success then return true end
+
+			return false, string.format("expected one of %s, got %s", table.concat(literalsAsStrings, ', '), tostring(value))
+		end
 	end
 end
 
